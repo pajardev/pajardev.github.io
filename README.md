@@ -1,9 +1,4 @@
-<html>
-	<body>
-		<head>
-		     <title>This Hello Word</title>
-		<h1>_____________________________________________________________</h1>
-		<h1>_____________________________________________________________</h1>
+
      <script language="JavaScript">alert("FAJAR DEVELOPER");</script>
     </head>
     <body> 
