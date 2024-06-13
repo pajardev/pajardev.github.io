@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,12 +72,26 @@
     </div>
 
     <script>
-        // Simulasi penambahan pengunjung setiap 5 detik
-        let visitorCount = 0;
-        setInterval(function() {
+        // Mengambil jumlah pengunjung dari localStorage
+        let visitorCount = localStorage.getItem('visitorCount');
+        if (visitorCount === null) {
+            visitorCount = 0;
+        } else {
+            visitorCount = parseInt(visitorCount);
+        }
+
+        // Fungsi untuk memperbarui jumlah pengunjung
+        function updateVisitorCount() {
             visitorCount++;
             document.getElementById('visitorCount').textContent = visitorCount;
-        }, 5000); // setiap 5 detik
+            localStorage.setItem('visitorCount', visitorCount);
+        }
+
+        // Memperbarui jumlah pengunjung setiap 5 detik
+        setInterval(updateVisitorCount, 5000);
+        
+        // Menampilkan jumlah pengunjung saat halaman dimuat
+        document.getElementById('visitorCount').textContent = visitorCount;
     </script>
 </body>
 </html>
