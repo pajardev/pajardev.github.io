@@ -46,7 +46,7 @@
       text-transform: uppercase;
       padding: 10px 20px;
       background-color: #007BFF;
-      color: white;
+      color: red;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       display: inline-block;
@@ -62,11 +62,22 @@
       border: 1px solid #ccc;
       text-transform: none;
     }
+    .footer {
+      text-align: center;
+      padding: 10px 0;
+      background-color: #002147;
+      color: #fff;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <div class="footer">
+      Jumlah Pengunjung: <span id="visitorCount">0</span>
+    </div>
     <h1>Cek Apa Aja</h1>
     <div class="input-container">
       <input type="text" id="fullName" placeholder="Masukkan Nama Lengkap Anda">
@@ -107,6 +118,7 @@
         `${name}, janda pirang: kamu akan selalu senang`,
         `${name}, sempak bolong: kamu akan selalu tertawa`,
         `${name}, ulat sagu: kamu selalu suka bergerak`,
+        `${name}, kerbau salto: kamu selalu merasa sakit hati`,
         `${name}, cicak salto: kamu selalu merasa pusing`
       ];
       displayMessage(randomArrayElem(messages));
@@ -126,6 +138,10 @@
         "Hitam",
         "Putih",
         "Ungu",
+        "jingga",
+        "Abu Abu",
+        "kelap kelip",
+        "Coklat",        
         "Pink"
       ];
       displayMessage(`${name}, warna sempak anda adalah: ${randomArrayElem(colors)}`);
@@ -171,6 +187,11 @@
         "Indah",
         "Yuni",
         "Citra",
+        "ayu",
+        "dinda",
+        "dea",
+        "Novi",
+        "Intan",
         "Lia"
       ];
       const maleNames = [
@@ -180,13 +201,39 @@
         "Fahri",
         "Hendra",
         "Iqbal",
+        "Riski",
+        "Nico",
+        "Jefri",
         "Joko",
+        "Irfan", 
+        "Bambang",       
         "Anto"
       ];
       const names = gender === 'female' ? femaleNames : maleNames;
       displayMessage(`${name}, nama pasangan anda adalah: ${randomArrayElem(names)}`);
     }
+
+    // Visitor counter
+    let visited = localStorage.getItem('visited');
+    if (!visited) {
+      visited = true;
+      localStorage.setItem('visited', visited);
+
+      let visitorCount = localStorage.getItem('visitorCount');
+      if (visitorCount === null) {
+        visitorCount = 0;
+      } else {
+        visitorCount = parseInt(visitorCount);
+      }
+
+      visitorCount++;
+      document.getElementById('visitorCount').textContent = visitorCount;
+      localStorage.setItem('visitorCount', visitorCount);
+    } else {
+      document.getElementById('visitorCount').textContent = localStorage.getItem('visitorCount');
+    }
   </script>
 
 </body>
-</html>
+  </html>
+  
