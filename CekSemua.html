@@ -70,28 +70,54 @@
       margin-bottom: 20px;
       border-radius: 5px;
     }
+    .admin-link {
+      color: #fff;
+      text-decoration: none;
+    }
+    .admin-link:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 8px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 8px solid #007BFF;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <div class="footer">
-      Jumlah Pengunjung: <span id="visitorCount">0</span>
+      Admin: <a href="https://wa.me/your_admin_phone_number" class="admin-link" target="_blank">Nama Admin</a>
     </div>
     <h1>Cek Apa Aja</h1>
     <div class="input-container">
-      <input type="text" id="fullName" placeholder="Masukkan Nama Lengkap Anda">
+      <input type="text" id="fullName" placeholder="Nama Lengkap Kamu">
     </div>
-    <button class="button" onclick="checkKhodam()">Cek Khodam</button>
-    <button class="button" onclick="checkSempak()">Cek Warna Sempak</button>
-    <button class="button" onclick="checkSaldo()">Cek Saldo</button>
-    <button class="button" onclick="checkFuture()">Cek Masa Depan</button>
+    <button class="button" onclick="check('khodam')">Cek Khodam</button>
+    <button class="button" onclick="check('sempak')">Cek Warna Sempak</button>
+    <button class="button" onclick="check('saldo')">Cek Saldo</button>
+    <button class="button" onclick="check('future')">Cek Masa Depan</button>
     <button class="button" onclick="checkPartner('female')">Cek Nama Pasangan Perempuan</button>
     <button class="button" onclick="checkPartner('male')">Cek Nama Pasangan Laki-Laki</button>
     <div class="message-container">
       <div class="message" id="message"></div>
     </div>
   </div>
+
+  <div class="loading" id="loading"></div>
 
   <script>
     function randomArrayElem(arr) {
@@ -107,12 +133,36 @@
       messageContainer.innerText = message.toUpperCase();
     }
 
-    function checkKhodam() {
+    function showLoading() {
+      document.getElementById('loading').style.display = 'block';
+    }
+
+    function hideLoading() {
+      document.getElementById('loading').style.display = 'none';
+    }
+
+    function check(type) {
       const name = getName();
       if (!name) {
-        alert('Masukkan nama lengkap Anda terlebih dahulu.');
+        alert('Masukkan nama lengkap Kamu');
         return;
       }
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        if (type === 'khodam') {
+          checkKhodam(name);
+        } else if (type === 'sempak') {
+          checkSempak(name);
+        } else if (type === 'saldo') {
+          checkSaldo(name);
+        } else if (type === 'future') {
+          checkFuture(name);
+        }
+      }, 2000);
+    }
+
+    function checkKhodam(name) {
       const messages = [
         `${name}, kuda terbang: kamu selalu bermimpi sedang terbang`,
         `${name}, janda pirang: kamu akan selalu senang`,
@@ -124,12 +174,7 @@
       displayMessage(randomArrayElem(messages));
     }
 
-    function checkSempak() {
-      const name = getName();
-      if (!name) {
-        alert('Masukkan nama lengkap Anda terlebih dahulu.');
-        return;
-      }
+    function checkSempak(name) {
       const colors = [
         "Merah",
         "Biru",
@@ -147,22 +192,12 @@
       displayMessage(`${name}, warna sempak anda adalah: ${randomArrayElem(colors)}`);
     }
 
-    function checkSaldo() {
-      const name = getName();
-      if (!name) {
-        alert('Masukkan nama lengkap Anda terlebih dahulu.');
-        return;
-      }
+    function checkSaldo(name) {
       const saldo = Math.floor(Math.random() * 1000000);
-      displayMessage(`${name}, saldo anda adalah: rp ${saldo.toLocaleString()}`);
+      displayMessage(`${name}, saldo kamu : rp ${saldo.toLocaleString()}`);
     }
 
-    function checkFuture() {
-      const name = getName();
-      if (!name) {
-        alert('Masukkan nama lengkap Anda terlebih dahulu.');
-        return;
-      }
+    function checkFuture(name) {
       const futures = [
         `${name}, kamu akan mendapatkan kejutan menyenangkan.`,
         `${name}, karir kamu akan berkembang pesat.`,
@@ -176,61 +211,45 @@
     function checkPartner(gender) {
       const name = getName();
       if (!name) {
-        alert('Masukkan nama lengkap Anda terlebih dahulu.');
+        alert('Masukkan nama lengkap Kamu');
         return;
       }
-      const femaleNames = [
-        "Cici",
-        "Evi",
-        "Yanti",
-        "Syifa",
-        "Indah",
-        "Yuni",
-        "Citra",
-        "ayu",
-        "dinda",
-        "dea",
-        "Novi",
-        "Intan",
-        "Lia"
-      ];
-      const maleNames = [
-        "Andika",
-        "Udin",
-        "Dedi",
-        "Fahri",
-        "Hendra",
-        "Iqbal",
-        "Riski",
-        "Nico",
-        "Jefri",
-        "Joko",
-        "Irfan", 
-        "Bambang",       
-        "Anto"
-      ];
-      const names = gender === 'female' ? femaleNames : maleNames;
-      displayMessage(`${name}, nama pasangan anda adalah: ${randomArrayElem(names)}`);
-    }
-
-    // Visitor counter
-    let visited = localStorage.getItem('visited');
-    if (!visited) {
-      visited = true;
-      localStorage.setItem('visited', visited);
-
-      let visitorCount = localStorage.getItem('visitorCount');
-      if (visitorCount === null) {
-        visitorCount = 0;
-      } else {
-        visitorCount = parseInt(visitorCount);
-      }
-
-      visitorCount++;
-      document.getElementById('visitorCount').textContent = visitorCount;
-      localStorage.setItem('visitorCount', visitorCount);
-    } else {
-      document.getElementById('visitorCount').textContent = localStorage.getItem('visitorCount');
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        const femaleNames = [
+          "Cici",
+          "Evi",
+          "Yanti",
+          "Syifa",
+          "Indah",
+          "Yuni",
+          "Citra",
+          "ayu",
+          "dinda",
+          "dea",
+          "Novi",
+          "Intan",
+          "Lia"
+        ];
+        const maleNames = [
+          "Andika",
+          "Udin",
+          "Dedi",
+          "Fahri",
+          "Hendra",
+          "Iqbal",
+          "Riski",
+          "Nico",
+          "Jefri",
+          "Joko",
+          "Irfan", 
+          "Bambang",       
+          "Anto"
+        ];
+        const names = gender === 'female' ? femaleNames : maleNames;
+        displayMessage(`${name}, nama pasangan kamu : ${randomArrayElem(names)}`);
+      }, 2000);
     }
   </script>
 
