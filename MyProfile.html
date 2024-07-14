@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .profile-container {
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 5px solid #333;
+        }
+
+        .name {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .profession {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: none;
+            margin-top: 1rem;
+            transition: max-height 0.5s ease-out, transform 0.5s ease-out;
+            overflow: hidden;
+            max-height: 0;
+            transform: translateY(-20px); /* Initial position above */
+        }
+
+        .social-links.show {
+            display: block;
+            max-height: 100px; /* Adjust as needed */
+            transform: translateY(0); /* Move to original position */
+        }
+
+        .social-links a {
+            margin: 0 0.5rem;
+            text-decoration: none;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            display: inline-block;
+            transition: transform 0.5s ease-out;
+            transform: translateY(20px); /* Initial position below */
+        }
+
+        .social-links.show a {
+            transform: translateY(0); /* Move to original position */
+        }
+
+        .social-links img {
+            width: 30px; /* Adjust size as needed */
+            height: 30px; /* Adjust size as needed */
+        }
+
+        .add-button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 1rem;
+            transition: background-color 0.5s, transform 0.5s;
+            transform: translateY(20px); /* Initial position above */
+        }
+
+        .add-button.star {
+            background-color: #800080; /* Warna ungu */
+        }
+
+        .add-button:focus {
+            outline: none;
+        }
+
+        .add-button.show {
+            transform: translateY(0); /* Move to original position */
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <img src="me1.webp" alt="Profile Image" class="profile-image">
+        <h1><div class="name">Fajar</div></h1>
+        <button class="add-button">+</button>
+        <div class="social-links">
+            <a href="https://wa.me/6283847047385" class="whatsapp" target="_blank">
+                <img src="wa.png" alt="WhatsApp">
+            </a>
+            <a href="https://facebook.com/yourprofile" class="facebook" target="_blank">
+                <img src="fb.png" alt="Facebook">
+            </a>
+            <a href="https://instagram.com/yourprofile" class="instagram" target="_blank">
+                <img src="ig.png" alt="Instagram">
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.add-button').addEventListener('click', function() {
+            const socialLinks = document.querySelector('.social-links');
+            const addButton = document.querySelector('.add-button');
+            if (socialLinks.style.maxHeight === '0px' || socialLinks.style.maxHeight === '') {
+                socialLinks.style.maxHeight = '100px'; /* Adjust as needed */
+                socialLinks.classList.add('show');
+                addButton.textContent = '★';
+                addButton.classList.add('star');
+                addButton.classList.add('show'); // Show button animation
+            } else {
+                socialLinks.style.maxHeight = '0px';
+                socialLinks.classList.remove('show');
+                addButton.textContent = '+';
+                addButton.classList.remove('star');
+                addButton.classList.remove('show'); // Hide button animation
+            }
+        });
+    </script>
+</body>
+</html>
