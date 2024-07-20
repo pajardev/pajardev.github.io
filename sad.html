@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karna Kamu Aku Rela Lyrics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .lyrics-container {
+            text-align: center;
+            display: none;
+        }
+
+        .line {
+            margin: 10px 0;
+            color: red;
+            font-size: 1.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid red;
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes typing {
+            from { width: 0; opacity: 1; }
+            to { width: 100%; opacity: 1; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: red; }
+        }
+    </style>
+</head>
+<body>
+    <button class="start-button">Mulai Sayank</button>
+    <div class="lyrics-container">
+        <div id="lyrics">
+            <p class="line" data-delay="1000" data-duration="2000">Karna kamu aku rela</p>
+            <p class="line" data-delay="3000" data-duration="2000">Menunggu semua</p>
+            <p class="line" data-delay="5000" data-duration="1000">Sungguh berat</p>
+            <p class="line" data-delay="6000" data-duration="1000">yang kurasa,</p>
+            <p class="line" data-delay="7000" data-duration="2000">Karna Kamu Aku</p>
+            <p class="line" data-delay="9000" data-duration="2000">Tetap Bertahan Meski Pun</p>
+            <p class="line" data-delay="11000" data-duration="2000">Kini engkau di peluk nya</p>
+            <p class="line" data-delay="13000" data-duration="4000">Masih Mungkinkah semua</p>
+            <p class="line" data-delay="17000" data-duration="2000">Abadi</p>
+            <p class="line" data-delay="19000" data-duration="1000">Seperti Dahulu</p>
+            <p class="line" data-delay="20000" data-duration="3000">Karna Mu Selalu Karna Mu</p>
+            <p class="line" data-delay="23000" data-duration="4000">Ku Cemburu</p>
+        </div>
+    </div>
+    <audio id="background-music" src="sadcuy.mp3"></audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startButton = document.querySelector('.start-button');
+            const lyricsContainer = document.querySelector('.lyrics-container');
+            const lines = document.querySelectorAll('.line');
+            const backgroundMusic = document.getElementById('background-music');
+
+            startButton.addEventListener('click', () => {
+                startButton.style.display = 'none';
+                lyricsContainer.style.display = 'block';
+                backgroundMusic.play();
+
+                lines.forEach(line => {
+                    const delay = line.getAttribute('data-delay');
+                    const duration = line.getAttribute('data-duration');
+                    setTimeout(() => {
+                        line.style.animation = `typing ${duration}ms steps(${duration / 100}, end), blink-caret 0.75s step-end infinite`;
+                        line.style.width = '100%';
+                        line.style.opacity = 1;
+                        setTimeout(() => {
+                            line.style.opacity = 0;
+                        }, duration);
+                    }, delay);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
