@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lirik Lagu</title>
+    <style>
+        body {
+            background-color: #5b4b5b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background-color: #5b4b5b;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .song-info {
+            margin-top: 10px;
+        }
+
+        .song-info h2 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+
+        .song-info p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .lyrics {
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            border: 2px solid cyan;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="song-info">
+            <h2>Cinta Kan Selalu Abadi</h2>
+            <p>For Revenge</p>
+        </div>
+        <div class="lyrics">
+            <p id="line1"><b>Cinta kan selalu abadi</b></p>
+            <p id="line2"><b>walau takdir tak pasti</b></p>
+            <p id="line3"><b>kau selalu di hati</b></p>
+            <p id="line4"><b>cinta mati ku</b></p>
+        </div>
+        <div class="platform">
+            <button onclick="playSong()">Play</button>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" src="cinta.mp3"></audio>
+
+    <script>
+        function playSong() {
+            var audio = document.getElementById("audioPlayer");
+            if (audio.paused) {
+                removeHighlight();
+                audio.play();
+                highlightLyrics();
+            } else {
+                audio.pause();
+            }
+        }
+
+        function removeHighlight() {
+            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+        }
+
+        function highlightLyrics() {
+            var audio = document.getElementById("audioPlayer");
+            audio.ontimeupdate = function() {
+                var currentTime = audio.currentTime;
+
+                removeHighlight();
+
+                if (currentTime >= 8 && currentTime < 10) {
+                    document.getElementById('line1').classList.add('highlight');
+                } else if (currentTime >= 10 && currentTime < 14) {
+                    document.getElementById('line2').classList.add('highlight');
+                } else if (currentTime >= 10 && currentTime < 17) {
+                    document.getElementById('line3').classList.add('highlight');
+                } else if (currentTime >= 17) {
+                    document.getElementById('line4').classList.add('highlight');
+                }
+            };
+        }
+    </script>
+</body>
+</html>
